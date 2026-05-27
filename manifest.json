@@ -1,7 +1,7 @@
 {
   "name": "TV Signal Finder",
   "short_name": "TV Signal",
-  "description": "Find UK TV transmitters from your postcode",
+  "description": "Find UK TV transmitters",
   "start_url": ".",
   "display": "standalone",
   "orientation": "portrait",

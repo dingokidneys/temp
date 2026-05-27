@@ -237,12 +237,11 @@
 
     // Colour pointer green if phone is aimed within ±5° of transmitter
     if (selectedTx) {
-      let diff = maths.abs(selectedTx.brg  - smoothedAlpha) % 360;
+      let diff = Math.abs(selectedTx.brg + smoothedAlpha) % 180;
       const colour = diff <= 5 ? '#52cdb4' : '#f95c5c';
-      document.getElementById('pointerArrow').style.fill = colour;
-      document.getElementById('polLabel').style.fill = colour;
-      document.getElementById('cmpNote').textContent = diff;
-
+      document.getElementById('pointerArrow').setAttribute('fill', colour);
+      document.getElementById('polLabel').setAttribute('fill', colour);
+      document.getElementById('cmpNote').textContent = diff.toFixed(1);
     }
   }
 

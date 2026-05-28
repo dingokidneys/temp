@@ -6,7 +6,7 @@ const SHELL = [
   './',
   './index.html',
   './manifest.json',
-  './transmitters.json'
+  './json/transmitters.json'
 ];
 
 self.addEventListener('install', e => {

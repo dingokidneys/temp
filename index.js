@@ -241,7 +241,6 @@
       const colour = diff <= 5 ? '#52cdb4' : '#f95c5c';
       document.getElementById('pointerArrow').setAttribute('fill', colour);
       document.getElementById('polLabel').setAttribute('fill', colour);
-      document.getElementById('cmpNote').textContent = diff.toFixed(1);
     }
   }
 

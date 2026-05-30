@@ -149,8 +149,8 @@
 
     renderTxList(top6);
     
-    document.getElementById('cmp-note2').textContent = 'Relative';
-    document.getElementById('cmp-note3').textContent = 'Power&nbsp;';
+    document.getElementById('cmpNote2').textContent = 'Relative';
+    document.getElementById('cmpNote3').textContent = 'Power&nbsp;';
   }
 
   function renderTxList(data) {

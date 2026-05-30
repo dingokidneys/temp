@@ -148,6 +148,9 @@
     top6.forEach(tx => { tx.pct = Math.round(tx.recv / maxRecv * 100); });
 
     renderTxList(top6);
+    
+    document.getElementById('cmp-note2').textContent = 'Relative';
+    document.getElementById('cmp-note3').textContent = 'Power&nbsp;';
   }
 
   function renderTxList(data) {

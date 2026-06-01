@@ -278,6 +278,7 @@
   document.getElementById('sortToggle').addEventListener('change', function () {
     sortByGeo = this.checked;
     document.getElementById('lbl-sig').classList.toggle('active', !sortByGeo);
+       document.getElementById('lbl-sig').classList.toggle('active', !sortByGeo);
     document.getElementById('lbl-geo').classList.toggle('active',  sortByGeo);
     if (currentTxData.length) renderSorted();
   });

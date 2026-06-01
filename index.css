@@ -128,16 +128,18 @@
 
     /* ── Transmitter table content ──────────────────── */
     .tx-toolbar {
-      flex: 0 0 auto;
+      flex: 0 0 28px;
+      height: 28px;
       display: flex; align-items: center;
-      gap: 8px; padding: 4px 10px;
-      border-bottom: 0px solid var(--bdr);
+      gap: 6px; padding: 0 8px;
+      border-bottom: 1px solid var(--bdr);
+      overflow: hidden;
     }
 
-    .tx-toolbar span {
-      font-size: 11px; font-weight: 700;
+    .tx-toolbar > span {
+      font-size: 10px; font-weight: 700;
       letter-spacing: 0.15em; text-transform: uppercase;
-      color: var(--teal); flex: 1;
+      color: var(--teal); flex: 1; line-height: 1;
     }
 
     #scanBtn {
@@ -210,47 +212,45 @@
     @keyframes spin { to { transform: rotate(360deg); } }
 
     /* ── Sort toggle ────────────────────────────── */
-.sort-toggle-wrap {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-}
+  .sort-toggle-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
 
-.sort-labels {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  justify-content: center;
-  gap: 1px;
-  margin-left: auto;
-}
+  .sort-labels {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 0;
+  }
 
 .sort-lbl {
-  font-size: 10px; font-weight: 700;
-  letter-spacing: 0.12em; text-transform: uppercase;
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.10em; text-transform: uppercase;
   color: var(--dim); transition: color 0.2s;
-  line-height: 1.3;
+  line-height: 1.2;
 }
 
 .sort-lbl.active { color: var(--teal); }
 
 .sw {
-  position: relative; width: 44px; height: 24px; flex-shrink: 0;
+  position: relative; width: 36px; height: 20px; flex-shrink: 0;
 }
 
 .sw input { opacity: 0; width: 0; height: 0; position: absolute; }
 
 .sw-track {
   position: absolute; inset: 0;
-  background: var(--bdr); border-radius: 24px;
+  background: var(--bdr); border-radius: 20px;
   cursor: pointer; transition: background 0.25s;
 }
 
 .sw-track::before {
   content: "";
   position: absolute;
-  width: 18px; height: 18px;
+  width: 14px; height: 14px;
   left: 3px; top: 3px;
   background: var(--dim);
   border-radius: 50%;
@@ -259,6 +259,6 @@
 
 .sw input:checked + .sw-track { background: rgba(0,212,170,0.25); }
 .sw input:checked + .sw-track::before {
-  transform: translateX(20px);
+  transform: translateX(16px);
   background: var(--teal);
 }

@@ -9,6 +9,8 @@
   let selectedTx     = null;
   let smoothedAlpha  = null;
   let compassRunning = false;
+  let sortByGeo      = false;
+  let currentTxData  = [];   // top-6 by signal, reused for both sort modes
 
   const SMOOTH = 0.12;
 
@@ -147,10 +149,8 @@
     const maxRecv = top6[0].recv;
     top6.forEach(tx => { tx.pct = Math.round(tx.recv / maxRecv * 100); });
 
-    renderTxList(top6);
-    
-    document.getElementById('cmpNote2').textContent = 'Relative';
-    document.getElementById('cmpNote3').textContent = 'Power&nbsp;';
+    currentTxData = top6;
+    renderSorted();
   }
 
   function renderTxList(data) {
@@ -262,6 +262,25 @@
         'Orientation sensor not supported';
     }
   }
+
+  // ═══════════════════════════════════════════
+  // SORT TOGGLE
+  // ═══════════════════════════════════════════
+  function renderSorted() {
+    const data = [...currentTxData];
+    if (sortByGeo) {
+      data.sort((a, b) => a.dist - b.dist);
+    }
+    // else already sorted by recv (signal) from doScan
+    renderTxList(data);
+  }
+
+  document.getElementById('sortToggle').addEventListener('change', function () {
+    sortByGeo = this.checked;
+    document.getElementById('lbl-sig').classList.toggle('active', !sortByGeo);
+    document.getElementById('lbl-geo').classList.toggle('active',  sortByGeo);
+    if (currentTxData.length) renderSorted();
+  });
 
   // ═══════════════════════════════════════════
   // SERVICE WORKER

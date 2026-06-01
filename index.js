@@ -10,7 +10,7 @@
   let smoothedAlpha  = null;
   let compassRunning = false;
   let sortByGeo      = false;
-  let currentTxData  = [];   // top-6 by signal, reused for both sort modes
+  let currentTxData  = [];   // top-10 by signal, reused for both sort modes
 
   const SMOOTH = 0.12;
 
@@ -145,11 +145,11 @@
       return { ...tx, dist, recv, brg };
     });
 
-    const top6 = all.sort((a,b) => b.recv - a.recv).slice(0, 6);
-    const maxRecv = top6[0].recv;
-    top6.forEach(tx => { tx.pct = Math.round(tx.recv / maxRecv * 100); });
+    const top10 = all.sort((a,b) => b.recv - a.recv).slice(0, 10);
+    const maxRecv = top10[0].recv;
+    top10.forEach(tx => { tx.pct = Math.round(tx.recv / maxRecv * 100); });
 
-    currentTxData = top6;
+    currentTxData = top10;
     renderSorted();
   }
 

@@ -139,6 +139,13 @@
       border-bottom: 1px solid var(--bdr);
     }
 
+    .tx-toolbar label.sw {
+      display: flex;
+      align-items: center;
+      margin: 0;
+      padding: 0;
+    }
+
     #scanBtn {
       background: var(--bg); border: none; border-radius: 6px;
       color: #05120e00; font-family: var(--sans); font-size: 13px;

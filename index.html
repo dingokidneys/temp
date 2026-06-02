@@ -16,7 +16,7 @@
 
   <!-- ── Header ───────────────────────────────────── -->
   <div id="hdr">
-    <div class="hdr-icon">
+    <div class="hdr-icon" id="appIcon" tabindex="0">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
           stroke="#030f0b" stroke-width="2.5"
           stroke-linecap="round" stroke-linejoin="round">
@@ -126,6 +126,11 @@
     </div>
 
   </div><!-- /panels -->
+  <div id="infoPopup" hidden>
+    <p>TV Signal Finder uses your GPS location to calculate the bearing and distance to Freeview transmitters across the UK.</p>
+    <p>Tap any transmitter in the list to point the compass towards it. Hold your phone flat, face up, and rotate until the arrow turns green.</p>
+    <p>The list shows the top 10 transmitters ranked by estimated received signal strength. Toggle the switch to reorder by distance instead.</p>
+  </div>
 </div><!-- /app -->
 
 <script src="index.js"> </script>

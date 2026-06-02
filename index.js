@@ -164,7 +164,6 @@
       div.innerHTML = `
         <span class="tx-rank">#${i+1}</span>
         <div class="tx-info">
-        
           <div class="tx-name">${tx.site}${'\u00A0'.repeat(2)}\u002D${'\u00A0'.repeat(2)}${tx.region}</div>
           <div class="tx-meta-row">
             <span>Polarisation\u00A0\u003D\u00A0${tx.pol}${'\u00A0'.repeat(6)}${fmtDist(tx.dist)}${'\u00A0'.repeat(6)}${Math.round(tx.brg)}\u00b0\u2009${compassPt(tx.brg)}</span>
@@ -280,7 +279,20 @@
     document.getElementById('lbl-geo').classList.toggle('active',  sortByGeo);
     if (currentTxData.length) renderSorted();
   });
+  
+  // ═══════════════════════════════════════════
+  // INFO POPUP
+  // ═══════════════════════════════════════════
+  document.getElementById('appIcon').addEventListener('click', function (e) {
+    e.stopPropagation();
+    const p = document.getElementById('infoPopup');
+    p.hidden = !p.hidden;
+  });
 
+  document.addEventListener('click', function () {
+    document.getElementById('infoPopup').hidden = true;
+  });
+  
   // ═══════════════════════════════════════════
   // SERVICE WORKER
   // ═══════════════════════════════════════════

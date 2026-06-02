@@ -283,9 +283,22 @@
   // ═══════════════════════════════════════════
   // INFO POPUP
   // ═══════════════════════════════════════════
-  document.getElementById('appIcon').addEventListener('click', function (e) {
+  let infoLoaded = false;
+
+  document.getElementById('appIcon').addEventListener('click', async function (e) {
     e.stopPropagation();
     const p = document.getElementById('infoPopup');
+
+    if (!infoLoaded) {
+      try {
+        const html = await fetch('info.html').then(r => r.text());
+        p.innerHTML = html;
+        infoLoaded = true;
+      } catch {
+        p.innerHTML = '<p>Info unavailable.</p>';
+      }
+    }
+
     p.hidden = !p.hidden;
   });
 

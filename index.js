@@ -164,10 +164,9 @@
       div.innerHTML = `
         <span class="tx-rank">#${i+1}</span>
         <div class="tx-info">
-          <div class="tx-name">${tx.site}</div>
+          <div class="tx-name">${tx.site}\u00A0\u00A0\u002D\\u00A0u00A0\${tx.region}</div>
           <div class="tx-meta-row">
-            <span>${tx.region}</span>
-            <span>\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0Polarisation\u00A0\u003D\u00A0${tx.pol}</span>
+            <span>Polarisation\u00A0\u003D\u00A0${tx.pol}</span>
             <span>\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0${fmtDist(tx.dist)}</span>
             <span>\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0${Math.round(tx.brg)}\u00b0\u2009${compassPt(tx.brg)}</span>
           </div>

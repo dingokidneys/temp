@@ -167,9 +167,9 @@
           <div class="tx-name">${tx.site}</div>
           <div class="tx-meta-row">
             <span>${tx.region}</span>
-            <span>\u00A0\u00A0\u00A0Polarisation\u003D${tx.pol}</span>
-            <span>\u00A0\u00A0\u00A0${fmtDist(tx.dist)}</span>
-            <span>\u00A0\u00A0\u00A0${Math.round(tx.brg)}\u00b0\u2009${compassPt(tx.brg)}</span>
+            <span>\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0Polarisation\u00A0\u003D\u00A0${tx.pol}</span>
+            <span>\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0${fmtDist(tx.dist)}</span>
+            <span>\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0${Math.round(tx.brg)}\u00b0\u2009${compassPt(tx.brg)}</span>
           </div>
         </div>
         <span class="tx-sig">${tx.pct}%</span>`;

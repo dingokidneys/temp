@@ -188,7 +188,7 @@
 }
 
 .tx-meta-row {
-  font-size: 10px; color: var(--teal);
+  font-size: 11px; color: var(--teal);
   display: flex; gap: 6px; flex-wrap: nowrap;
 }
 

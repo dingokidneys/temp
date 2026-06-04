@@ -13,12 +13,9 @@
   let currentTxData  = [];   // top-10 by signal, reused for both sort modes
 
   const SMOOTH = 0.12;
-  
-  let isAligned     = false;
-  let audioUnlocked = false;
-  const alignSound  = new Audio('aligned.mp3');
-  alignSound.preload = 'auto';
-  alignSound.loop = false;
+
+  let isAligned    = false;
+  let audioCtx     = null;
 
   // ═══════════════════════════════════════════
   // LOAD TRANSMITTER DATA
@@ -192,13 +189,12 @@
     rowEl.classList.add('selected');
     selectedTx = tx;
 
-    if (!audioUnlocked) {
-    alignSound.play().then(() => {
-      alignSound.pause();
-      alignSound.currentTime = 0;
-      audioUnlocked = true;
-    }).catch(err => console.warn('Audio unlock failed:', err));
-  }
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
     document.getElementById('cmpTitle').textContent = tx.site;
     document.getElementById('cmpTitle').classList.add('active');
     document.getElementById('cmpStats').style.display = 'flex';
@@ -257,12 +253,8 @@
       document.getElementById('pointerArrow').setAttribute('fill', colour);
       document.getElementById('polLabel').setAttribute('fill', colour);
 
-      if (aligned && !isAligned) {
-         alignSound.currentTime = 0;
-          alignSound.play().catch(err => console.warn('Audio play failed:', err));
-      } else if (!aligned && isAligned) {
-          alignSound.pause();
-          alignSound.currentTime = 0;
+     if (aligned && !isAligned) {
+        playBeep();
       }
       isAligned = aligned;
     }
@@ -282,6 +274,23 @@
       document.getElementById('cmpNote').textContent =
         'Orientation sensor not supported';
     }
+  }
+
+  // ═══════════════════════════════════════════
+  // AUDIO
+  // ═══════════════════════════════════════════
+  function playBeep() {
+    if (!audioCtx) return;
+    const osc  = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.type            = 'sine';
+    osc.frequency.value = 880;
+    gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
+    osc.start(audioCtx.currentTime);
+    osc.stop(audioCtx.currentTime + 0.6);
   }
 
   // ═══════════════════════════════════════════

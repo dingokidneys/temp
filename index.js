@@ -13,6 +13,9 @@
   let currentTxData  = [];   // top-10 by signal, reused for both sort modes
 
   const SMOOTH = 0.12;
+  let isAligned = false;
+  const alignSound = new Audio('aligned.mp3');
+  alignSound.loop = false;
 
   // ═══════════════════════════════════════════
   // LOAD TRANSMITTER DATA
@@ -238,9 +241,20 @@
     // Colour pointer green if phone is aimed within ±5° of transmitter
     if (selectedTx) {
       let diff = Math.abs(selectedTx.brg + smoothedAlpha) % 360;
-      const colour = diff <= 5 ? '#52cdb4' : '#f95c5c';
+      if (diff > 180) diff = 360 - diff;
+      const aligned = diff <= 5;
+      const colour  = aligned ? '#52cdb4' : '#f95c5c';
       document.getElementById('pointerArrow').setAttribute('fill', colour);
       document.getElementById('polLabel').setAttribute('fill', colour);
+
+      if (aligned && !isAligned) {
+        alignSound.currentTime = 0;
+        alignSound.play().catch(() => {});
+      } else if (!aligned && isAligned) {
+        alignSound.pause();
+        alignSound.currentTime = 0;
+      }
+      isAligned = aligned;
     }
   }
 

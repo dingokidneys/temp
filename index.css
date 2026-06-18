@@ -1,0 +1,324 @@
+    :root {
+      --bg:    #304877;
+      --surf:  #0f1520;
+      --surf2: #151d2e;
+      --bdr:   #1e2d45;
+      --teal:  #00d4aa;
+      --amber: #dba44d;
+      --text:  #c8d8e8;
+      --text2:  #ebebeb;
+      --dim:   #6b7d90;
+      --compasslabels:   #353535;
+      --compasscntr:   #809fdd ;
+      --compassring:   #6c92df ;
+
+
+      --mono:  'JetBrains Mono', monospace;
+      --sans:  'Rajdhani', sans-serif;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box; margin: 0; padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      height: 100%; overflow: hidden;
+      background: var(--bg); color: var(--text);
+      font-family: var(--sans); font-size: 15px;
+    }
+
+    #app {
+      display: flex; flex-direction: column;
+      height: 100vh; height: 100dvh;
+      position: relative;
+    }
+
+    /* ── Header ─────────────────────────────────────── */
+    #hdr {
+      flex: 0 0 auto;
+      background: var(--bg);
+      border-bottom: 4px solid var(--bdr); text-align: center;
+      padding: 8px 14px;
+      display: flex; align-items: center; gap: 10px;
+    }
+
+    .hdr-icon {
+      width: 28px; height: 28px; background: var(--teal);
+      border-radius: 6px; display: flex;
+      align-items: center; justify-content: center; flex-shrink: 0;
+    }
+
+    #hdr h1 {
+      font-size: 18px; font-weight: 700;
+      letter-spacing: 0.06em; color: var(--text2); flex: 1;
+    }
+
+    #hdr h1 em { color: var(--teal); font-style: normal; }
+
+    /* ── Panels ─────────────────────────────────────── */
+    #panels {
+      flex: 1 1 0; display: flex;
+      flex-direction: column; min-height: 0;
+    }
+
+    /* Compass — 65% */
+    #cmpPanel {
+      flex: 0 0 65%;
+      background: var(--bg);
+      border-bottom: 4px solid var(--bdr);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 6px; overflow: hidden;
+    }
+
+    /* Transmitter table — 25% */
+    #txPanel {
+      flex: 0 0 25%;
+      background: var(--bg);
+      border-bottom: 4px solid var(--bdr);
+      display: flex; flex-direction: column;
+      min-height: 0;
+    }
+
+    /* Location — 10% */
+    #locPanel {
+      flex: 0 0 10%;
+      background: var(--bg);
+      padding: 4px 12px;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center; gap: 3px;
+      overflow: hidden;
+    }
+
+    /* ── Compass content ────────────────────────────── */
+    .cmp-title {
+      font-size: 13px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    .cmp-title.active { color: #fff; }
+
+    .cmp-stats { display: flex; gap: 20px; text-align: center; }
+
+    .stat-block { display: flex; flex-direction: column; gap: 2px; }
+
+    .stat-lbl {
+      font-size: 9px; text-transform: uppercase;
+      letter-spacing: 0.12em; color: var(--text2);
+    }
+
+    .stat-val {
+      font-family: var(--mono); font-size: 17px;
+      font-weight: 600; color: #fff;
+    }
+
+    .stat-val.t { color: var(--teal); }
+    .stat-val.a { color: var(--amber); }
+
+    #rose {
+      width: min(80vw, 60vh);
+      height: min(80vw, 60vh);
+    }
+
+    .cmp-note {
+      font-size: 13px; color: var(--teal);
+      text-align: center; max-width: 240px;
+    }
+
+    /* ── Transmitter table content ──────────────────── */
+    .tx-toolbar {
+      flex: 0 0 auto;
+      height: 26px;
+      max-height: 26px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 8px;
+      border-bottom: 1px solid var(--bdr);
+    }
+
+    .tx-toolbar label.sw {
+      display: flex;
+      align-items: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    #scanBtn {
+      background: var(--bg); border: none; border-radius: 6px;
+      color: #05120e00; font-family: var(--sans); font-size: 13px;
+      font-weight: 700; padding: 4px 14px; cursor: pointer;
+      letter-spacing: 0.08em; transition: opacity 0.ms;
+    }
+
+    #scanBtn:active   { opacity: 0; }
+    #scanBtn:disabled { opacity: 0; }
+
+    #txList {
+      flex: 1 1 0; overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+  .tx-row {
+    display: flex; align-items: center;
+    gap: 5px; padding: 3px 8px;
+    border-bottom: 1px solid var(--bdr);
+    cursor: pointer; transition: background 0.1s;
+    user-select: none;
+  }
+
+    .tx-row:active   { background: var(--surf2); }
+    .tx-row.selected {
+      background: rgba(0,212,170,0.08);
+      border-left: 3px solid var(--teal);
+    }
+  
+    .tx-rank {
+      font-family: var(--text); font-size: 12px;
+      color: var(--teal); min-width: 18px; flex-shrink: 0;
+    }
+
+    .tx-info { flex: 1; min-width: 0; }
+
+.tx-name {
+  font-size: 12px; font-weight: 700; color: #e8f0f8;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.tx-meta-row {
+  font-size: 11px; color: var(--teal);
+  display: flex; gap: 6px; flex-wrap: nowrap;
+}
+
+.tx-sig {
+  font-family: var(--mono); font-size: 12px;
+  font-weight: 600; color: var(--teal);
+  flex-shrink: 0; min-width: 34px; text-align: right;
+}
+
+    .tx-placeholder {
+      padding: 14px; font-size: 12px;
+      color: var(--text2); text-align: center;
+    }
+
+    /* ── Spinner ────────────────────────────────────── */
+    .spinner {
+      width: 10px; height: 10px;
+      border: 1.5px solid rgb(83, 124, 116);
+      border-top-color: var(--teal);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Sort toggle ────────────────────────────── */
+  .sort-toggle-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+/* ── Tx column header ───────────────────────── */
+  .tx-col-hdr {
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    min-width: 34px;
+    line-height: 1.1;
+  }
+
+  .tx-col-hdr span {
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--teal);
+    display: block;
+  }
+  
+  .sort-labels {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+  }
+
+.sort-lbl {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--dim);
+  transition: color 0.2s;
+  line-height: 1.15;
+  margin: 0;
+  padding: 0;
+  display: block;
+}
+
+.sort-lbl.active { color: var(--teal); }
+
+.sw {
+  position: relative; width: 36px; height: 20px; flex-shrink: 0;
+}
+
+.sw input { opacity: 0; width: 0; height: 0; position: absolute; }
+
+.sw-track {
+  position: absolute; inset: 0;
+  background: var(--bdr); border-radius: 20px;
+  cursor: pointer; transition: background 0.25s;
+}
+
+.sw-track::before {
+  content: "";
+  position: absolute;
+  width: 14px; height: 14px;
+  left: 3px; top: 3px;
+  background: var(--dim);
+  border-radius: 50%;
+  transition: transform 0.25s, background 0.25s;
+}
+
+.sw input:checked + .sw-track { background: rgba(0,212,170,0.25); }
+.sw input:checked + .sw-track::before {
+  transform: translateX(16px);
+  background: var(--teal);
+}
+
+/* ── Info popup ─────────────────────────────── */
+#appIcon {
+  cursor: pointer;
+}
+
+#infoPopup {
+  position: absolute;
+  top: 50px;
+  left: 8px;
+  z-index: 200;
+  background: var(--surf);
+  border: 1px solid var(--teal);
+  border-radius: 10px;
+  padding: 12px 14px;
+  max-width: 270px;
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.6;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.5);
+  flex-direction: column;
+  gap: 8px;
+}
+
+#infoPopup:not([hidden]) {
+  display: flex;
+}

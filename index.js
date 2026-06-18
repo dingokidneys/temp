@@ -1,4 +1,4 @@
-  // ═══════════════════════════════════════════
+// ═══════════════════════════════════════════
   // STATE
   // ═══════════════════════════════════════════
   const PI = Math.PI;
@@ -35,18 +35,19 @@
 
   async function loadTransmitters() {
     transmitters = [];
+    const failed = [];
     const fetches = activeCountries.map(cc =>
       fetch(COUNTRY_FILES[cc])
         .then(r => { if (!r.ok) throw new Error(cc); return r.json(); })
-        .catch(() => {
-          console.warn('Could not load', COUNTRY_FILES[cc]);
-          return [];
-        })
+        .catch(() => { failed.push(COUNTRY_FILES[cc]); return []; })
     );
     const results = await Promise.all(fetches);
     transmitters = results.flat();
     if (!transmitters.length) {
-      document.getElementById('locLine1').textContent = 'ERROR: no transmitter data loaded';
+      document.getElementById('locLine1').textContent =
+        'ERROR: could not load ' + (failed.join(', ') || 'transmitter data');
+    } else if (failed.length) {
+      console.warn('Failed to load:', failed.join(', '));
     }
   }
 

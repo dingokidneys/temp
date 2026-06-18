@@ -14,18 +14,90 @@
 
   const SMOOTH = 0.12;
 
-  let isAligned    = false;
-  let audioCtx     = null;
-
   // ═══════════════════════════════════════════
   // LOAD TRANSMITTER DATA
   // ═══════════════════════════════════════════
-  fetch('transmitters.json')
-    .then(r => { if (!r.ok) throw new Error(); return r.json(); })
-    .then(data => { transmitters = data; })
-    .catch(() => {
-      document.getElementById('locLine1').textContent = 'ERROR: transmitters.json not found';
-    });
+  // ═══════════════════════════════════════════
+  // COUNTRY SETTINGS
+  // ═══════════════════════════════════════════
+  const COUNTRY_FILES = {
+    uk: 'transmitters_uk.json',
+    fr: 'transmitters_fr.json',
+    de: 'transmitters_de.json',
+  };
+
+  // Load saved country prefs (default: UK only)
+  let activeCountries = JSON.parse(localStorage.getItem('tvsf-countries') || '["uk"]');
+
+  function saveCountryPrefs() {
+    localStorage.setItem('tvsf-countries', JSON.stringify(activeCountries));
+  }
+
+  async function loadTransmitters() {
+    transmitters = [];
+    const fetches = activeCountries.map(cc =>
+      fetch(COUNTRY_FILES[cc])
+        .then(r => { if (!r.ok) throw new Error(cc); return r.json(); })
+        .catch(() => {
+          console.warn('Could not load', COUNTRY_FILES[cc]);
+          return [];
+        })
+    );
+    const results = await Promise.all(fetches);
+    transmitters = results.flat();
+    if (!transmitters.length) {
+      document.getElementById('locLine1').textContent = 'ERROR: no transmitter data loaded';
+    }
+  }
+
+  // Transmitters are loaded in onGPSSuccess once location is known
+
+  // ── Settings UI functions ────────────────────
+  function openSettings() {
+    // Sync checkboxes to current state
+    document.getElementById('chk-uk').checked = activeCountries.includes('uk');
+    document.getElementById('chk-fr').checked = activeCountries.includes('fr');
+    document.getElementById('chk-de').checked = activeCountries.includes('de');
+    document.getElementById('settings-warn').style.display = 'none';
+
+    // Close info popup first
+    document.getElementById('infoPopup').hidden = true;
+
+    const m = document.getElementById('settingsModal');
+    m.style.display = 'flex';
+  }
+
+  function closeSettings() {
+    document.getElementById('settingsModal').style.display = 'none';
+  }
+
+  function onCountryChange() {
+    const anyChecked = ['uk','fr','de'].some(cc =>
+      document.getElementById('chk-' + cc).checked
+    );
+    document.getElementById('settings-warn').style.display =
+      anyChecked ? 'none' : 'block';
+  }
+
+  async function applySettings() {
+    const selected = ['uk','fr','de'].filter(cc =>
+      document.getElementById('chk-' + cc).checked
+    );
+    if (!selected.length) {
+      document.getElementById('settings-warn').style.display = 'block';
+      return;
+    }
+    activeCountries = selected;
+    saveCountryPrefs();
+    closeSettings();
+    await loadTransmitters();
+    doScan();
+  }
+
+  // Close settings modal on backdrop click
+  document.getElementById('settingsModal').addEventListener('click', function(e) {
+    if (e.target === this) closeSettings();
+  });
 
   // ═══════════════════════════════════════════
   // MATHS
@@ -68,7 +140,7 @@
   // ═══════════════════════════════════════════
   // GPS — auto-start on load
   // ═══════════════════════════════════════════
-  function onGPSSuccess(pos) {
+  async function onGPSSuccess(pos) {
     const lat = pos.coords.latitude;
     const lng = pos.coords.longitude;
 
@@ -80,12 +152,12 @@
       '\u00a0\u00a0\u00a0\u00a0\u00a0' +
       lat.toFixed(4) + '\u00b0\u00a0\u00a0' + lng.toFixed(4) + '\u00b0';
 
-    // Step 2 & 3 — build table and select first entry immediately
+    // Load transmitter data for saved countries, then scan
     document.getElementById('scanBtn').disabled = false;
+    await loadTransmitters();
     doScan();
 
-    // Step 4 — populate address after table/compass are rendered
-    //setTimeout(() => reverseGeocode(lat, lng), 0);
+    // Populate address after table/compass are rendered
     reverseGeocode(lat, lng);
   }
 
@@ -189,12 +261,6 @@
     rowEl.classList.add('selected');
     selectedTx = tx;
 
-    if (!audioCtx) {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    }
-    if (audioCtx.state === 'suspended') {
-      audioCtx.resume();
-    }
     document.getElementById('cmpTitle').textContent = tx.site;
     document.getElementById('cmpTitle').classList.add('active');
     document.getElementById('cmpStats').style.display = 'flex';
@@ -247,16 +313,9 @@
     // Colour pointer green if phone is aimed within ±5° of transmitter
     if (selectedTx) {
       let diff = Math.abs(selectedTx.brg + smoothedAlpha) % 360;
-      if (diff > 180) diff = 360 - diff;
-      const aligned = diff <= 5;
-      const colour  = aligned ? '#52cdb4' : '#f95c5c';
+      const colour = diff <= 5 ? '#52cdb4' : '#f95c5c';
       document.getElementById('pointerArrow').setAttribute('fill', colour);
       document.getElementById('polLabel').setAttribute('fill', colour);
-
-     if (aligned && !isAligned) {
-        playBeep();
-      }
-      isAligned = aligned;
     }
   }
 
@@ -274,23 +333,6 @@
       document.getElementById('cmpNote').textContent =
         'Orientation sensor not supported';
     }
-  }
-
-  // ═══════════════════════════════════════════
-  // AUDIO
-  // ═══════════════════════════════════════════
-  function playBeep() {
-    if (!audioCtx) return;
-    const osc  = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    osc.type            = 'sine';
-    osc.frequency.value = 880;
-    gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
-    osc.start(audioCtx.currentTime);
-    osc.stop(audioCtx.currentTime + 0.6);
   }
 
   // ═══════════════════════════════════════════

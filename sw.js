@@ -1,13 +1,15 @@
 // TV Signal Finder — Service Worker
 // Caches the app shell and transmitter data for offline use
 
-const CACHE = 'tv-signal-v18';
+const CACHE = 'tv-signal-v20';
 const SHELL = [
   './',
   './index.html',
-  './manifest.json',
-  './transmitters.json'
+  './manifest.json'
 ];
+
+// Transmitter files (uk/fr/de) are NOT pre-cached in the shell.
+// They are fetched on demand and cached equally by the fetch handler below.
 
 self.addEventListener('install', e => {
   e.waitUntil(

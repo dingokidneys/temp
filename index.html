@@ -127,6 +127,96 @@
 
   </div><!-- /panels -->
   <div id="infoPopup" hidden></div>
+
+  <!-- ── Settings modal ───────────────────────────── -->
+  <div id="settingsModal" style="
+    display:none;
+    position:absolute;inset:0;z-index:300;
+    background:rgba(8,12,20,0.82);
+    align-items:center;justify-content:center;
+  ">
+    <div style="
+      background:var(--surf);
+      border:1px solid var(--teal);
+      border-radius:12px;
+      padding:18px 20px;
+      width:min(300px,90vw);
+      color:var(--text);
+      font-family:var(--sans);
+    ">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <span style="font-size:16px;font-weight:700;letter-spacing:0.08em;color:var(--text2)">Country Data</span>
+        <button onclick="closeSettings()" style="
+          background:none;border:none;cursor:pointer;
+          color:var(--dim);font-size:20px;line-height:1;padding:2px 6px;
+        ">&times;</button>
+      </div>
+
+      <p style="font-size:12px;color:var(--dim);margin-bottom:14px;line-height:1.5;">
+        Select which countries to include. At least one must be active.
+        Changes take effect on the next scan.
+      </p>
+
+      <!-- UK -->
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--bdr);">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:22px;line-height:1;">&#127468;&#127463;</span>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:var(--text2);">United Kingdom</div>
+            <div style="font-size:11px;color:var(--dim);">transmitters_uk.json</div>
+          </div>
+        </div>
+        <label class="sw">
+          <input type="checkbox" id="chk-uk" checked onchange="onCountryChange()">
+          <span class="sw-track"></span>
+        </label>
+      </div>
+
+      <!-- France -->
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--bdr);">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:22px;line-height:1;">&#127467;&#127479;</span>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:var(--text2);">France</div>
+            <div style="font-size:11px;color:var(--dim);">transmitters_fr.json</div>
+          </div>
+        </div>
+        <label class="sw">
+          <input type="checkbox" id="chk-fr" onchange="onCountryChange()">
+          <span class="sw-track"></span>
+        </label>
+      </div>
+
+      <!-- Germany -->
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:22px;line-height:1;">&#127465;&#127466;</span>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:var(--text2);">Germany</div>
+            <div style="font-size:11px;color:var(--dim);">transmitters_de.json</div>
+          </div>
+        </div>
+        <label class="sw">
+          <input type="checkbox" id="chk-de" onchange="onCountryChange()">
+          <span class="sw-track"></span>
+        </label>
+      </div>
+
+      <div id="settings-warn" style="
+        display:none;margin-top:10px;
+        font-size:12px;color:var(--amber);text-align:center;
+      ">&#9888; At least one country must be selected.</div>
+
+      <button onclick="applySettings()" style="
+        margin-top:16px;width:100%;padding:9px 0;
+        background:rgba(0,212,170,0.15);
+        border:1px solid var(--teal);border-radius:7px;
+        color:var(--teal);font-family:var(--sans);
+        font-size:14px;font-weight:700;letter-spacing:0.08em;cursor:pointer;
+      ">Save &amp; Rescan</button>
+    </div>
+  </div>
+
 </div><!-- /app -->
 
 <script src="index.js"> </script>

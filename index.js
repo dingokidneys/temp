@@ -170,33 +170,23 @@
   async function reverseGeocode(lat, lng) {
     document.getElementById('locLine1').textContent = 'Getting address\u2026';
     try {
-      const [nomRes, pcRes] = await Promise.all([
-        fetch(
-          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=16&addressdetails=1`,
-          { headers: { 'Accept-Language': 'en' } }
-        ),
-        fetch(`https://api.postcodes.io/postcodes?lon=${lng}&lat=${lat}&limit=1`)
-      ]);
+      const res  = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=16&addressdetails=1`,
+        { headers: { 'Accept-Language': 'en' } }
+      );
+      const data = await res.json();
+      const a    = data.address || {};
 
-      const nomData = await nomRes.json();
-      const pcData  = await pcRes.json();
-      const a       = nomData.address || {};
-
-      // Line 1 — road, place
       const road  = a.road || a.pedestrian || a.path || '';
-      const place = a.village || a.town || pcData.result.nuts || a.city || '';
+      const place = a.village || a.town || a.suburb || a.city || '';
       document.getElementById('locLine1').textContent =
-        [road, place].filter(Boolean).join(",\u00A0\u00A0") || 'Unknown location';
+        [road, place].filter(Boolean).join(',\u00A0\u00A0') || 'Unknown location';
 
-      // Line 2 — postcode then coords (already shown, just prepend postcode)
-      const postcode = (pcData.status === 200 && pcData.result && pcData.result[0])
-        ? pcData.result[0].postcode
-        : (a.postcode || '');
-      document.getElementById('locPostcode').textContent = postcode;
+      document.getElementById('locPostcode').textContent = a.postcode || '';
 
     } catch(e) {
       document.getElementById('locLine1').textContent = 'Address unavailable';
-    }
+      }
   }
 
   // Request GPS on page load
